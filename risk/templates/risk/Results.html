@@ -1,0 +1,35 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Result
+{% endblock %}
+
+{% block content %}
+  
+
+    <table class="table-condensed" style="width:500px; margin-top:20px;">
+        <tr><td colspan="2"><hr/></td></tr>
+        <tr><td>Decision</td><td>Your choice</td><td>Your payoff</td></tr>
+        <tr><td>Decision 1</td><td>{% if player.d1 == 1%} A {% else %} B {% endif %}</td><td> {{ player.risk_choice1 }}</td></tr>
+        <tr><td>Decision 2</td><td>{% if player.d2 == 1%} A {% else %} B {% endif %}</td><td> {{ player.risk_choice2 }}</td></tr>
+        <tr><td>Decision 3</td><td>{% if player.d3 == 1%} A {% else %} B {% endif %}</td><td> {{ player.risk_choice3 }}</td></tr>
+        <tr><td>Decision 4</td><td>{% if player.d4 == 1%} A {% else %} B {% endif %}</td><td> {{ player.risk_choice4 }}</td></tr>
+        <tr><td>Decision 5</td><td>{% if player.d5 == 1%} A {% else %} B {% endif %}</td><td> {{ player.risk_choice5 }}</td></tr>
+        <tr><td>Decision 6</td><td>{% if player.d6 == 1%} A {% else %} B {% endif %}</td><td> {{ player.risk_choice6 }}</td></tr>
+        <tr><td>Decision 7</td><td>{% if player.d7 == 1%} A {% else %} B {% endif %}</td><td> {{ player.risk_choice7 }}</td></tr>
+        <tr><td>Decision 8</td><td>{% if player.d8 == 1%} A {% else %} B {% endif %}</td><td> {{ player.risk_choice8 }}</td></tr>
+        <tr><td colspan="2"><hr/></td></tr>
+        <tr><td>chosen decision</td><td>{{ final }}</td></tr>
+        <tr><td>You will get:</td><td>{{ payoff }}</td></tr>
+
+    </table>
+    <p></p>
+
+    <p>
+    <button class="otree-btn-next btn btn-primary">Next</button>
+    </p>
+
+
+
+{% endblock %}

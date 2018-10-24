@@ -1,0 +1,33 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+{% load i18n %}
+{% block title %}
+    Result of dice rolling
+{% endblock %}
+
+{% block content %}
+<table class="table">
+    <tr>
+        <td>Entered the number:</td>
+        <td>{{ player.report_dice }}</td>
+    </tr>
+    {% comment %}
+    <tr>
+        <td>System's recorded the number:</td>
+        <td>
+            {% if player.report %}
+                {{ player.report }}
+            {% else %}
+               The player did not roll the dice
+            {% endif %}
+        </td>
+    </tr>
+    {% endcomment %}
+</table>
+
+
+
+
+{% next_button %}
+
+{% endblock %}

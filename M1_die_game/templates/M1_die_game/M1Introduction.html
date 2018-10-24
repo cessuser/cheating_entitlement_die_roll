@@ -1,0 +1,34 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Model 1
+{% endblock %}
+
+{% block content %}
+<p>
+     This module starts with a die game. Please follow the instructions on your screen. After that half of the participants will receive an Endowment of 1000 ECUs (group A), and the other half will not (group B).
+    <br>
+    <br>
+    Each participant who receives an Endowment (group A) will be randomly paired with another person in this room who has not (group B). You will not know your partner's identity, nor will they know yours. Nor will these identities be revealed after the session is completed.
+    <br>
+    <br>
+    However, before the endowments are distributed and the pairing takes place, you may allocate the endowment between yourself and the other person as you wish if you were to receive this Endowment. Finally, if you are randomly chosen to be in group A, your choice will be actually implemented.
+    <br>
+    <br>
+    Profits in this module will be calculated in the following way:
+    <br>
+    <table>
+    <td> <tr> 1)  Group A: Profits = Endowment – Amount Sent</tr> </td>
+    <td> 2) Group B: Profits = Amount Received </td>
+    </table>
+    <br>
+    You will be informed of your earnings for this module at the end of the experiment.
+    <br>
+<br>
+    The exchange rate is: 500 ECUs = 1  £
+
+</p>
+    {% next_button %}
+
+{% endblock %}
