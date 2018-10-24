@@ -113,8 +113,8 @@ class Group(BaseGroup):
         player_sorted[2].payoff = c(150*random.sample(player_sorted[2].participant.vars['high'], 1)[0])
 
         player_sorted[0].payoff += player_sorted[0].real_die_value2 * 100
-        player_sorted[1].payoff += player_sorted[0].real_die_value2 * 100
-        player_sorted[2].payoff += player_sorted[0].real_die_value2 * 100
+        player_sorted[1].payoff += player_sorted[0].real_die_value2 * 150
+        player_sorted[2].payoff += player_sorted[0].real_die_value2 * 200
 
         if player_sorted[0].roundPred == 3:
             player_sorted[0].payoff += 100

@@ -15,9 +15,9 @@ SESSION_CONFIGS = [
     {
        'name': 'cheating_entitlement',
        'display_name': "Cheating_Entitlement",
-       'num_demo_participants': 3,
+       'num_demo_participants': 6,
        'app_sequence': ['M1_die_game','M1_dictator', 'M2_die_match', 'M3_die_match_progressive','risk','M5_number_add1',
-                        'M5_number_add2', 'M5_number_add3', 'M5_number_add4', 'M5_number_add5'],
+                        'M5_number_add2', 'M5_number_add3', 'M5_number_add4', 'M5_number_add5', 'LastModel'],
     },
     {
        'name': 'number_task',
