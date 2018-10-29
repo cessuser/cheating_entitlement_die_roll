@@ -40,6 +40,7 @@ class Intro(Page):
         return self.round_number == 1
 
 page_sequence = [
+    Intro,
     Introduction,
     DiceRolling,
     Offer,
