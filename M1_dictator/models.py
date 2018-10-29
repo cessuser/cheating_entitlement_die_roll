@@ -19,7 +19,7 @@ S285-S300.
 class Constants(BaseConstants):
     name_in_url = 'M1_dictator'
     players_per_group = 2
-    num_rounds = 10
+    num_rounds = 1
 
     instructions_template = 'M1_dictator/Instructions.html'
 
