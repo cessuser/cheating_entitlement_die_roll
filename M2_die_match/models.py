@@ -24,6 +24,7 @@ class Constants(BaseConstants):
 
 class Subsession(BaseSubsession):
     def creating_session(self):
+
         if self.round_number == 1:
             workbook1 = xlrd.open_workbook(Constants.file_location1)
             workbook2 = xlrd.open_workbook(Constants.file_location2)
@@ -33,29 +34,44 @@ class Subsession(BaseSubsession):
             sheet2 = workbook2.sheet_by_name('170711_1334')
             sheet3 = workbook3.sheet_by_name('170908_1146')
             sheet4 = workbook4.sheet_by_name('171006_0927')
-            x = []
-            for value in sheet1.col_values(8):
+            x1 = []
+            x2 = []
+            x3 = []
+            x4 = []
+            groups = [[], [], [], [], [], [], [], [], [], []]
+            for value in sheet1.col_values(7):
                 if isinstance(value, float):
-                    x.append(int(value))
-            for value in sheet2.col_values(8):
+                    x1.append(int(value))
+            for value in sheet2.col_values(7):
                 if isinstance(value, float):
-                    x.append(int(value))
-            for value in sheet3.col_values(8):
+                    x2.append(int(value))
+            for value in sheet3.col_values(7):
                 if isinstance(value, float):
-                    x.append(int(value))
-            for value in sheet4.col_values(8):
+                    x3.append(int(value))
+            for value in sheet4.col_values(7):
                 if isinstance(value, float):
-                    x.append(int(value))
+                    x4.append(int(value))
+            print("x1: ", x1)
+            index = 0
+            while index < len(x1):
+                groups[int(index/24)].append(sorted([x1[index], x1[index+1], x1[index+2]]))
+                groups[int(index/24)].append(sorted([x2[index], x2[index + 1], x2[index + 2]]))
+                groups[int(index/24)].append(sorted([x4[index], x4[index + 1], x4[index + 2]]))
+                index += 3
+            index = 0
+            while index < len(x4):
+                groups[int(index/36)].append(sorted([x3[index], x3[index+1], x3[index+2]]))
+                index += 3
+
             for p in self.get_players():
-                p.participant.vars['data'] = sorted(x)
-                p.participant.vars['low'] = p.participant.vars['data'][0:360]
-                p.participant.vars['medium'] = p.participant.vars['data'][360:720]
-                p.participant.vars['high'] = p.participant.vars['data'][720:]
+                p.participant.vars['data'] = sorted(x1)
+                p.participant.vars['groups'] = groups
                 p.participant.vars['dices'] = [random.randint(1,6) for i in range(0, 10)]
-                p.participant.vars['dices2'] = [random.randint(1, 6) for i in range(0, 10)]
                 p.participant.vars['all_m2_payoff'] = []
+                p.participant.vars['m2_payoff'] = 0
                 p.roundPred_correct = False
                 p.modelPred_correct = False
+
 
 
 class Group(BaseGroup):
@@ -86,6 +102,8 @@ class Group(BaseGroup):
 
 
     def set_payoff(self):
+        for p in self.get_players():
+            p.payoff = 0
         dice_sort = [[p, p.real_die_value] for p in self.get_players()]
         dice_sort = sorted(dice_sort, key=lambda x:x[1])
         player_sorted = [0,0,0]
@@ -108,13 +126,15 @@ class Group(BaseGroup):
         player_sorted[p2_index] = dice_sort[1][0]
         player_sorted[p3_index] = dice_sort[2][0]
 
-        player_sorted[0].payoff = c(150*random.sample(player_sorted[0].participant.vars['low'],1)[0])
-        player_sorted[1].payoff = c(150*random.sample(player_sorted[1].participant.vars['medium'], 1)[0])
-        player_sorted[2].payoff = c(150*random.sample(player_sorted[2].participant.vars['high'], 1)[0])
+        round_groups = player_sorted[0].participant.vars['groups'][self.round_number-1]
+        cur_group = random.sample(round_groups, 1)[0]
+        player_sorted[0].payoff = c(150*cur_group[0]) #low
+        player_sorted[1].payoff = c(150*cur_group[1]) #medium
+        player_sorted[2].payoff = c(150*cur_group[2]) #high
 
-        player_sorted[0].payoff += player_sorted[0].real_die_value2 * 100
-        player_sorted[1].payoff += player_sorted[0].real_die_value2 * 100
-        player_sorted[2].payoff += player_sorted[0].real_die_value2 * 100
+        player_sorted[0].payoff += c(player_sorted[0].dice_value * 100)
+        player_sorted[1].payoff += c(player_sorted[1].dice_value * 100)
+        player_sorted[2].payoff += c(player_sorted[2].dice_value * 100)
 
         if player_sorted[0].roundPred == 3:
             player_sorted[0].payoff += 100
@@ -134,25 +154,23 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-    real_die_value = models.IntegerField()
-    real_die_value2 = models.IntegerField()
-    modelPred = models.IntegerField(choices=[(1, 'High'), (2, 'Medium'), (3, 'Low')], widget=widgets.RadioSelect)
+    real_die_value = models.IntegerField() # virtual dice value report
+    modelPred = models.IntegerField(choices=[(1, 'Top Third'), (2, 'Middle Third'), (3, 'Bottom Thrid')], widget=widgets.RadioSelect)
     roundPred = models.IntegerField(choices=[1, 2, 3], widget=widgets.RadioSelect)
     final_payoff = models.CurrencyField()
     chosen_round = models.IntegerField()
     roundPred_correct = models.BooleanField()
     modelPred_correct = models.BooleanField()
 
+    dice_value = models.IntegerField(min=1, max=6)
+
 
     def roll_die(self):
         self.real_die_value = self.participant.vars['dices'][self.round_number-1]
         print(self.real_die_value)
 
-    def roll_die2(self):
-        self.real_die_value2 = self.participant.vars['dices2'][self.round_number-1]
-        print(self.real_die_value2)
-
     def set_final_payoff(self):
         self.chosen_round = random.randint(1, Constants.num_rounds)
         self.final_payoff = self.participant.vars['all_m2_payoff'][self.chosen_round-1]
         self.participant.vars['chosen_round_m2'] = self.chosen_round
+        self.participant.vars['m2_payoff'] = self.final_payoff

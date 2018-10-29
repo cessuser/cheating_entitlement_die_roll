@@ -46,6 +46,12 @@ class Group(BaseGroup):
             if player_lst[i][0].participant.vars['M5_modelPred'] == 1 and num_players*2/3<= i < num_players*2/3:
                 player_lst[i][0].payoff += 100
 
+            player_lst[i][0].participant.vars['M5_payoff'] = player_lst[i][0].payoff
+
+    def set_final_payoff(self):
+        for p in self.get_players():
+            p.payoff = p.participant.vars['M1_payoff'] + p.participant.vars['m2_payoff'] + p.participant.vars['m3_payoff'] \
+                       + p.participant.vars['M4_payoff'] + p.participant.vars['M5_payoff']
 
 class Player(BasePlayer):
     chosen = models.IntegerField()

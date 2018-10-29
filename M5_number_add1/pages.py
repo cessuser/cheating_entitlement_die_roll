@@ -79,8 +79,9 @@ class Results(Page):
 page_sequence = [
     Introduction,
     ModelPred,
-    TaskPage,
     RoundPred,
+    TaskPage,
+
     ResultWaitPage,
     Results
 ]

@@ -19,8 +19,8 @@ class Constants(BaseConstants):
 class Subsession(BaseSubsession):
     def creating_session(self):
         if self.round_number == 1:
-            nums1 = [random.randint(10, 100) for i in range(0,Constants.num_rounds)]
-            nums2 = [random.randint(10, 100) for i in range(0, Constants.num_rounds)]
+            nums1 = [89, 78, 12, 36, 26, 45, 44, 55, 16, 49, 76, 13, 72, 53, 79, 90, 32, 56, 25, 74, 88, 95, 30, 48, 29, 25, 14, 91, 96, 15]
+            nums2 = [63, 81, 14, 65, 38, 42, 40, 25, 23, 69, 28, 94, 19, 59, 83, 80, 93, 12, 27, 98, 41, 83, 25, 63, 91, 63, 29, 63, 11, 76]
             for p in self.get_players():
                 p.participant.vars['nums1'] = nums1
                 p.participant.vars['nums2'] = nums2

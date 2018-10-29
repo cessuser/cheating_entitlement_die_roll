@@ -6,7 +6,7 @@ from os import environ
 # e.g. self.session.config['participation_fee']
 
 SESSION_CONFIG_DEFAULTS = {
-    'real_world_currency_per_point': 1.00,
+    'real_world_currency_per_point': 0.002,
     'participation_fee': 0.00,
     'doc': "",
 }
@@ -16,7 +16,7 @@ SESSION_CONFIGS = [
        'name': 'cheating_entitlement',
        'display_name': "Cheating_Entitlement",
        'num_demo_participants': 6,
-       'app_sequence': ['M1_die_game','M1_dictator', 'M2_die_match', 'M3_die_match_progressive','risk','M5_number_add1',
+       'app_sequence': ['M1_dictator', 'M2_die_match', 'M3_die_match_progressive','M4_risk_pref','M5_number_add1',
                         'M5_number_add2', 'M5_number_add3', 'M5_number_add4', 'M5_number_add5', 'LastModel'],
     },
     {
@@ -26,10 +26,28 @@ SESSION_CONFIGS = [
        'app_sequence': ['M5_number_add1', 'M5_number_add5', 'LastModel'],
     },
     {
-       'name': 'number_task1',
-       'display_name': "number_task1",
+       'name': 'M1_dictator',
+       'display_name': "M1_dictator",
+       'num_demo_participants': 2,
+       'app_sequence': ['M1_dictator'],
+    },
+    {
+       'name': 'M2_die_match',
+       'display_name': "M2_die_match",
        'num_demo_participants': 3,
-       'app_sequence': ['M5_number_add1'],
+       'app_sequence': ['M2_die_match'],
+    },
+    {
+       'name': 'M3_die_match',
+       'display_name': "M3_die_match",
+       'num_demo_participants': 3,
+       'app_sequence': ['M3_die_match_progressive'],
+    },
+    {
+       'name': 'M4_die_match',
+       'display_name': "M4_die_match",
+       'num_demo_participants': 3,
+       'app_sequence': ['M4_risk_pref'],
     }
 
 ]
@@ -65,8 +83,8 @@ ADMIN_PASSWORD = environ.get('OTREE_ADMIN_PASSWORD')
 
 
 # Consider '', None, and '0' to be empty/false
-DEBUG = (environ.get('OTREE_PRODUCTION') in {None, '', '0'})
-
+# DEBUG = (environ.get('OTREE_PRODUCTION') in {None, '', '0'})
+DEBUG = 1
 DEMO_PAGE_INTRO_HTML = """ """
 
 # don't share this with anybody.

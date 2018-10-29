@@ -78,8 +78,8 @@ class Results(Page):
 
 page_sequence = [
     Introduction,
+RoundPred,
     TaskPage,
-    RoundPred,
     ResultWaitPage,
     Results
 ]

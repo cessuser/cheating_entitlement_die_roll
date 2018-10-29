@@ -2,20 +2,13 @@
 {% load otree static %}
 
 {% block title %}
-    Result of Model 1
+    Result of Module 1
 {% endblock %}
 
 {% block content %}
     <p>
 
-        {% if player.id_in_group == 1 %}
-            You were <strong>Player 1 </strong>
-            <p> You decided to keep  <strong>{{ group.kept }}</strong>
-            <p>Your payoff in this model is <strong>{{ group.kept }}</strong></p>
-        {% else %}
-            <p> Player 1 decided to keep  <strong>{{ group.kept }}</strong>
-            <p>Your payoff in this model is <strong>{{ offer }}</strong></p>
-        {% endif %}
+        This is the end of Module 1
 
     <p>
         {% next_button %}

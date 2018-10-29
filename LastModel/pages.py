@@ -15,6 +15,15 @@ class ResultsWaitPage(WaitPage):
 class Results(Page):
     def vars_for_template(self):
         self.group.set_payoff()
+        return {
+            'pay1': self.player.participant.vars['M1_payoff'],
+            'pay2': self.player.participant.vars['m2_payoff'],
+            'pay3': self.player.participant.vars['m3_payoff'],
+            'pay4': self.player.participant.vars['M4_payoff'],
+            'pay5': self.player.participant.vars['M5_payoff'],
+            'total': self.player.payoff
+        }
+
 
 
 page_sequence = [
