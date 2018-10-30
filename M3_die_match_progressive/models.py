@@ -7,14 +7,14 @@ import random
 author = 'Danlin Chen'
 
 doc = """
-match with previous 3 players and high outcome * 200 ECU, medium * 150ECU, low outcome * 100ECU with the outcome 
+match with previous 3 players and multiply 150 ECUs with the outcome 
 """
 
 
 class Constants(BaseConstants):
     name_in_url = 'M3_die_match_progressive'
     players_per_group = 3
-    num_rounds = 10
+    num_rounds = 1
     thrown = [1,2,3,4,5,6]
     reward = [c(100),c(200),c(300),c(400),c(500),c(600)]
     file_location1 = "_static/data/170711_1143.xlsx"
@@ -51,6 +51,7 @@ class Subsession(BaseSubsession):
             for value in sheet4.col_values(7):
                 if isinstance(value, float):
                     x4.append(int(value))
+            print("x1: ", x1)
             index = 0
             while index < len(x1):
                 groups[int(index/24)].append(sorted([x1[index], x1[index+1], x1[index+2]]))
@@ -70,30 +71,33 @@ class Subsession(BaseSubsession):
                 p.participant.vars['m3_payoff'] = 0
                 p.roundPred_correct = False
                 p.modelPred_correct = False
+                p.participant.vars['matched_outcomes'] = []
+
 
 
 class Group(BaseGroup):
     def set_modelPred(self):
-        player_pred = [[p, sum(p.participant.vars['all_m3_payoff'])] for p in self.get_players()]
-        print('player predict: ', player_pred)
-        player_pred = sorted(player_pred, key=lambda x: x[1])
-        print('player preidct: ', player_pred)
+        player_pred = [[p, sum(p.participant.vars['matched_outcomes'])] for p in self.get_players()]
+        player_pred = sorted(player_pred, key=lambda x: x[1], reverse=True)
+
         player_pred[0].append(1)
         player_pred[1].append(2)
         player_pred[2].append(3)
 
-        if player_pred[0][0].modelPred == 3:
+        if player_pred[0][0].modelPred == 1:
             player_pred[0][0].payoff += 100
             player_pred[0][0].modelPred_correct = True
-            player_pred[0][0].participant.vars['m3_payoff'] += 100
+            player_pred[0][0].participant.vars['m3_payoff'] = player_pred[0][0].payoff
         if player_pred[1][0].modelPred == 2:
             player_pred[1][0].payoff += 100
             player_pred[1][0].modelPred_correct = True
-            player_pred[1][0].participant.vars['m3_payoff'] += 100
-        if player_pred[2][0].modelPred == 1:
+            player_pred[1][0].participant.vars['m3_payoff'] = player_pred[1][0].payoff
+        if player_pred[2][0].modelPred == 3:
             player_pred[2][0].payoff += 100
             player_pred[2][0].modelPred_correct = True
-            player_pred[2][0].participant.vars['m3_payoff'] += 100
+            player_pred[2][0].participant.vars['m3_payoff'] = player_pred[2][0].payoff
+        print('player preidct: ', [[p, p.payoff] for p in self.get_players()])
+
 
 
 
@@ -124,13 +128,24 @@ class Group(BaseGroup):
 
         round_groups = player_sorted[0].participant.vars['groups'][self.round_number-1]
         cur_group = random.sample(round_groups, 1)[0]
-        player_sorted[0].payoff = c(100*cur_group[0]) #low
-        player_sorted[1].payoff = c(150*cur_group[1]) #medium
-        player_sorted[2].payoff = c(200*cur_group[2]) #high
 
-        player_sorted[0].payoff += c(player_sorted[0].dice_value * 100)
-        player_sorted[1].payoff += c(player_sorted[1].dice_value * 100)
-        player_sorted[2].payoff += c(player_sorted[2].dice_value * 100)
+        # set matched level & matched payoff
+        player_sorted[0].matched_level = '3rd'  # low
+        player_sorted[1].matched_level = '2nd'  # medium
+        player_sorted[2].matched_level = '1st'  # high
+
+        player_sorted[0].matched_payoff = c(100*cur_group[0]) #low
+        player_sorted[1].matched_payoff = c(150*cur_group[1]) #medium
+        player_sorted[2].matched_payoff = c(200*cur_group[2]) #high
+
+        player_sorted[0].participant.vars['matched_outcomes'].append(player_sorted[0].matched_payoff)
+        player_sorted[1].participant.vars['matched_outcomes'].append(player_sorted[1].matched_payoff)
+        player_sorted[2].participant.vars['matched_outcomes'].append(player_sorted[2].matched_payoff)
+
+        # set payoff
+        player_sorted[0].payoff = player_sorted[0].matched_payoff  # low
+        player_sorted[1].payoff = player_sorted[1].matched_payoff  # medium
+        player_sorted[2].payoff = player_sorted[2].matched_payoff  # high
 
         if player_sorted[0].roundPred == 3:
             player_sorted[0].payoff += 100
@@ -142,22 +157,18 @@ class Group(BaseGroup):
             player_sorted[2].payoff += 100
             player_sorted[2].roundPred_correct = True
 
-        player_sorted[0].participant.vars['all_m3_payoff'].append(player_sorted[0].payoff)
-        player_sorted[1].participant.vars['all_m3_payoff'].append(player_sorted[1].payoff)
-        player_sorted[2].participant.vars['all_m3_payoff'].append(player_sorted[2].payoff)
-
         print([[p, p.payoff, p.roundPred, p.real_die_value] for p in player_sorted])
 
 
 class Player(BasePlayer):
-    real_die_value = models.IntegerField()
-    modelPred = models.IntegerField(choices=[(1, 'Top Third'), (2, 'Middle Third'), (3, 'Bottom Third')], widget=widgets.RadioSelect)
-    roundPred = models.IntegerField(choices=[1,2,3], widget=widgets.RadioSelect)
-    die_result = models.StringField()
-    final_payoff = models.CurrencyField()
+    real_die_value = models.IntegerField() # virtual dice value report
+    modelPred = models.IntegerField(choices=[(1, 'Top Third'), (2, 'Middle Third'), (3, 'Bottom Thrid')], widget=widgets.RadioSelect)
+    roundPred = models.IntegerField(choices=[1, 2, 3], widget=widgets.RadioSelect)
     chosen_round = models.IntegerField()
     roundPred_correct = models.BooleanField()
     modelPred_correct = models.BooleanField()
+    matched_payoff = models.CurrencyField()
+    matched_level = models.StringField()
 
     dice_value = models.IntegerField(min=1, max=6)
 
@@ -168,6 +179,7 @@ class Player(BasePlayer):
 
     def set_final_payoff(self):
         self.chosen_round = random.randint(1, Constants.num_rounds)
-        self.final_payoff = self.participant.vars['all_m3_payoff'][self.chosen_round-1]
+        self.payoff = self.participant.vars['all_m3_payoff'][self.chosen_round-1]
         self.participant.vars['chosen_round_m3'] = self.chosen_round
-        self.participant.vars['m3_payoff'] = self.final_payoff
+        self.participant.vars['m3_payoff'] = self.payoff
+        print("set final: ", self.matched_level, self.payoff, self.participant.vars['all_m3_payoff'] )

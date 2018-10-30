@@ -42,9 +42,16 @@ class ModelPred(Page):
         return self.round_number == 1
 
 
-class ResultsWaitPage(WaitPage):
+class GroupWaitPage(WaitPage):
     def after_all_players_arrive(self):
         self.group.set_payoff()
+
+
+class ResultsWaitPage(WaitPage):
+    wait_for_all_groups = True
+
+    def after_all_players_arrive(self):
+        pass
 
 
 class Results(Page):
@@ -65,12 +72,23 @@ class RealDiceRolling(Page):
             'round_num': self.round_number
         }
 
+    def before_next_page(self):
+        self.player.payoff += c(self.player.dice_value * 100)
+        self.player.participant.vars['all_m2_payoff'].append(self.player.payoff)
+
+
+class MatchedOutcome(Page):
+    pass
+
+
 page_sequence = [
     Introduction,
     ModelPred,
     RoundPred,
     DiceRolling,
     DiceRolling2,
+    GroupWaitPage,
+    MatchedOutcome,
     RealDiceRolling,
     ResultsWaitPage,
     Results

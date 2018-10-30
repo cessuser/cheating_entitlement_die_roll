@@ -5,6 +5,24 @@
 {% endblock %}
 
 {% block content %}
+<p>
+    Now you can roll the real die to get some additional payoff for this round.
+    <table border="1">
+  <tr>
+    <th>Number Thrown</th>
+      {% for number in Constants.thrown %}
+        <th>{{number}}</th>
+      {% endfor %}
+  </tr>
+  <tr>
+    <td>Resulting Payoff</td>
+      {% for reward in Constants.reward %}
+        <td>{{reward}}</td>
+      {% endfor %}
+  </tr>
+</table>
+<br>
+</p>
     <div class="demo">
         <div class="wrap">
             <div id="dice" class="dice dice_t"></div>

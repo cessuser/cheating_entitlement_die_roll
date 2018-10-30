@@ -13,13 +13,17 @@ class RoundPred(Page):
     form_fields = ['roundPred']
     form_model = models.Player
 
+    def vars_for_template(self):
+        return {
+        'round_num': self.round_number
+        }
+
 
 class DiceRolling(Page):
     def vars_for_template(self):
         return {
-            'round_num': self.round_number
+            'round_num': self.round_number,
         }
-
 
 class DiceRolling2(Page):
     def vars_for_template(self):
@@ -38,9 +42,16 @@ class ModelPred(Page):
         return self.round_number == 1
 
 
-class ResultsWaitPage(WaitPage):
+class GroupWaitPage(WaitPage):
     def after_all_players_arrive(self):
         self.group.set_payoff()
+
+
+class ResultsWaitPage(WaitPage):
+    wait_for_all_groups = True
+
+    def after_all_players_arrive(self):
+        pass
 
 
 class Results(Page):
@@ -53,13 +64,22 @@ class Results(Page):
 
 
 class RealDiceRolling(Page):
-    form_fields = ['dice_value']
     form_model = models.Player
+    form_fields = ['dice_value']
 
     def vars_for_template(self):
         return {
             'round_num': self.round_number
         }
+
+    def before_next_page(self):
+        self.player.payoff += c(self.player.dice_value * 100)
+        self.player.participant.vars['all_m3_payoff'].append(self.player.payoff)
+
+
+class MatchedOutcome(Page):
+    pass
+
 
 page_sequence = [
     Introduction,
@@ -67,6 +87,8 @@ page_sequence = [
     RoundPred,
     DiceRolling,
     DiceRolling2,
+    GroupWaitPage,
+    MatchedOutcome,
     RealDiceRolling,
     ResultsWaitPage,
     Results
