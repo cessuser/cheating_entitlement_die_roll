@@ -56,6 +56,7 @@ class Player(BasePlayer):
     correct = models.IntegerField() # if correct
     n_correct = models.IntegerField() # number of correct
     roundPred = models.IntegerField(choices=[1, 2, 3], widget=widgets.RadioSelect)
+    modelPred = models.IntegerField()
 
     rank = models.IntegerField()
 

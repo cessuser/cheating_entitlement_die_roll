@@ -71,6 +71,7 @@ class Results(Page):
         return self.round_number == Constants.num_rounds
 
     def vars_for_template(self):
+        self.player.modelPred = self.player.participant.vars['M5_modelPred']
         self.group.set_payoff()
         return{
             'n_correct': self.player.participant.vars['n_correct4_M5']
