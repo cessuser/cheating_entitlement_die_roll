@@ -19,7 +19,6 @@ SESSION_CONFIGS = [
        'app_sequence': ['M1_dictator', 'M2_die_match', 'M3_die_match_progressive','M4_risk_pref','M5_number_add1',
                         'M5_number_add2', 'M5_number_add3', 'M5_number_add4', 'M5_number_add5', 'LastModel'],
     },
-
     {
        'name': 'M1_dictator',
        'display_name': "M1_dictator",
@@ -74,6 +73,18 @@ SESSION_CONFIGS = [
         'num_demo_participants': 3,
         'app_sequence': ['M5_number_add5'],
     },
+    {
+        'name': 'M5_number_task',
+        'display_name': "M5_number_task",
+        'num_demo_participants': 3,
+        'app_sequence': ['M5_number_add1', 'M5_number_add2'],
+    },
+    {
+        'name': 'M23',
+        'display_name': "M23_number_task",
+        'num_demo_participants': 3,
+        'app_sequence': ['M2_die_match', 'M3_die_match_progressive'],
+    }
 
 
 

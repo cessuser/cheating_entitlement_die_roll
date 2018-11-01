@@ -66,7 +66,7 @@ class Subsession(BaseSubsession):
             for p in self.get_players():
                 p.participant.vars['data'] = sorted(x1)
                 p.participant.vars['groups'] = groups
-                p.participant.vars['dices'] = [random.randint(1,6) for i in range(0, 10)]
+                # p.participant.vars['dices'] = [random.randint(1,6) for i in range(0, 10)]
                 p.participant.vars['all_m2_payoff'] = []
                 p.participant.vars['m2_payoff'] = 0
                 p.roundPred_correct = False
@@ -170,5 +170,5 @@ class Player(BasePlayer):
 
 
     def roll_die(self):
-        self.real_die_value = self.participant.vars['dices'][self.round_number-1]
+        self.real_die_value = random.randint(1,6)
         print(self.real_die_value)

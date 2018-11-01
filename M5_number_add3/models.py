@@ -16,18 +16,22 @@ class Constants(BaseConstants):
     players_per_group = 3
     num_rounds = 30
 
+    nums1 = [81, 100, 55, 97, 83, 47, 26, 24, 49, 36, 26, 72, 29, 24, 15, 97, 12, 96, 43, 77, 49, 64, 76, 39, 57, 78,
+             58, 88, 83, 40]
+    nums2 = [81, 56, 83, 99, 39, 79, 30, 38, 51, 90, 29, 41, 21, 36, 92, 33, 60, 13, 57, 69, 10, 83, 38, 17, 10, 36, 76,
+             51, 60, 18]
+
 class Subsession(BaseSubsession):
     def creating_session(self):
-        self.group_randomly()
         if self.round_number == 1:
-            nums1 = [81, 100, 55, 97, 83, 47, 26, 24, 49, 36, 26, 72, 29, 24, 15, 97, 12, 96, 43, 77, 49, 64, 76, 39, 57, 78, 58, 88, 83, 40]
-            nums2 = [81, 56, 83, 99, 39, 79, 30, 38, 51, 90, 29, 41, 21, 36, 92, 33, 60, 13, 57, 69, 10, 83, 38, 17, 10, 36, 76, 51, 60, 18]
-            for p in self.get_players():
-                p.participant.vars['nums1'] = nums1
-                p.participant.vars['nums2'] = nums2
-                p.participant.vars['ans'] = []
-                for i in range(0,Constants.num_rounds):
-                    p.participant.vars['ans'].append(nums1[i] + nums2[i])
+            self.group_randomly()
+        for p in self.get_players():
+            p.participant.vars['nums1'] = Constants.nums1
+            p.participant.vars['nums2'] = Constants.nums2
+            p.participant.vars['ans'] = []
+            for i in range(0,Constants.num_rounds):
+                p.participant.vars['ans'].append(Constants.nums1[i] + Constants.nums2[i])
+            if self.round_number == 1:
                 p.participant.vars['M5_round3Pay'] = 0
                 p.participant.vars['n_correct3_M5'] = 0
 
@@ -60,7 +64,7 @@ class Player(BasePlayer):
     def check_correct(self):
         if self.round_number == 1:
             self.participant.vars['n_correct3_M5'] = 0
-        if self.answer == self.participant.vars['ans'][self.round_number-1]:
+        if self.answer == Constants.nums1[self.round_number-1] + Constants.nums2[self.round_number-1]:
             self.correct = 1
             self.participant.vars['n_correct3_M5'] += 1
         else:

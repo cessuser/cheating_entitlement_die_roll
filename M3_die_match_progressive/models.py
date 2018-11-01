@@ -168,5 +168,5 @@ class Player(BasePlayer):
     dice_value = models.IntegerField(min=1, max=6)
 
     def roll_die(self):
-        self.real_die_value = self.participant.vars['dices'][self.round_number-1]
+        self.real_die_value = random.randint(1,6)
         print(self.real_die_value)

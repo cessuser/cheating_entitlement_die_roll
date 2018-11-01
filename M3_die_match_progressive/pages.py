@@ -14,6 +14,8 @@ class RoundPred(Page):
     form_model = models.Player
 
     def vars_for_template(self):
+        if self.round_number > 1:
+            self.player.modelPred = self.player.participant.vars['modelPred_m3']
         return {
         'round_num': self.round_number
         }
@@ -41,6 +43,8 @@ class ModelPred(Page):
     def is_displayed(self):
         return self.round_number == 1
 
+    def before_next_page(self):
+        self.player.participant.vars['modelPred_m3'] = self.player.modelPred
 
 class GroupWaitPage(WaitPage):
     def after_all_players_arrive(self):

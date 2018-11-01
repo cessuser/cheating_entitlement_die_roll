@@ -22,14 +22,16 @@ class Constants(BaseConstants):
 
 class Subsession(BaseSubsession):
     def creating_session(self):
-        self.group_randomly()
         if self.round_number == 1:
-            for p in self.get_players():
-                p.participant.vars['nums1'] = Constants.nums1
-                p.participant.vars['nums2'] = Constants.nums2
-                p.participant.vars['ans'] = []
-                for i in range(0,Constants.num_rounds):
-                    p.participant.vars['ans'].append(Constants.nums1[i] + Constants.nums2[i])
+            self.group_randomly()
+
+        for p in self.get_players():
+            p.participant.vars['nums1'] = Constants.nums1
+            p.participant.vars['nums2'] = Constants.nums2
+            p.participant.vars['ans'] = []
+            for i in range(0,Constants.num_rounds):
+                p.participant.vars['ans'].append(Constants.nums1[i] + Constants.nums2[i])
+            if self.round_number == 1:
                 p.participant.vars['M5_round4Pay'] = 0
                 p.participant.vars['n_correct4_M5'] = 0
 
@@ -61,7 +63,7 @@ class Player(BasePlayer):
     def check_correct(self):
         if self.round_number == 1:
             self.participant.vars['n_correct4_M5'] = 0
-        if self.answer == self.participant.vars['ans'][self.round_number-1]:
+        if self.answer == Constants.nums1[self.round_number-1] + Constants.nums2[self.round_number-1]:
             self.correct = 1
             self.participant.vars['n_correct4_M5'] += 1
         else:
