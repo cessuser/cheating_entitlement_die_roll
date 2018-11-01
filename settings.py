@@ -39,8 +39,8 @@ SESSION_CONFIGS = [
        'app_sequence': ['M3_die_match_progressive'],
     },
     {
-       'name': 'M4_die_match',
-       'display_name': "M4_die_match",
+       'name': 'M4_risk',
+       'display_name': "M4_risk",
        'num_demo_participants': 3,
        'app_sequence': ['M4_risk_pref'],
     },
