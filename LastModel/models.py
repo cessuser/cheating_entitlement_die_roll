@@ -29,7 +29,7 @@ class Group(BaseGroup):
         num_players = len(self.get_players())
         print('player lst', player_lst)
         for i in range(0,len(self.get_players())):
-            cur_player = cur_player
+            cur_player = player_lst[i][0]
             cur_player.payoff = 0
             payoffs = [cur_player.participant.vars['M5_round1Pay'],
                        cur_player.participant.vars['M5_round2Pay'],
