@@ -56,10 +56,10 @@ class ResultsWaitPage(WaitPage):
 
 class Results(Page):
     def vars_for_template(self):
-        self.player.set_final_payoff()
-        self.group.set_modelPred()
+        self.group.set_final_payoff()
 
     def is_displayed(self):
+
         return self.round_number == Constants.num_rounds
 
 
