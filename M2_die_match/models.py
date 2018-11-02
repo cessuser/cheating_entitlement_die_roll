@@ -59,7 +59,7 @@ class Subsession(BaseSubsession):
                 groups[int(index/24)].append(sorted([x4[index], x4[index + 1], x4[index + 2]]))
                 index += 3
             index = 0
-            while index < len(x4):
+            while index < len(x3):
                 groups[int(index/36)].append(sorted([x3[index], x3[index+1], x3[index+2]]))
                 index += 3
 

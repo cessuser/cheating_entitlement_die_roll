@@ -17,10 +17,10 @@ class Constants(BaseConstants):
     num_rounds = 10
     thrown = [1,2,3,4,5,6]
     reward = [100,200,300,400,500,600]
-    file_location1 = "_static/data/170711_1143.xlsx"
-    file_location2 = "_static/data/170711_1334.xlsx"
-    file_location3 = "_static/data/170908_1146.xlsx"
-    file_location4 = "_static/data/171006_0927.xlsx"
+    file_location1 = "_static/data/M3_170811_1231.xlsx"
+    file_location2 = "_static/data/M3_170823_1534.xlsx"
+    file_location3 = "_static/data/M3_170908_1004.xlsx"
+    file_location4 = "_static/data/M3_171005_1029.xlsx"
 
 class Subsession(BaseSubsession):
     def creating_session(self):
@@ -30,10 +30,10 @@ class Subsession(BaseSubsession):
             workbook2 = xlrd.open_workbook(Constants.file_location2)
             workbook3 = xlrd.open_workbook(Constants.file_location3)
             workbook4 = xlrd.open_workbook(Constants.file_location4)
-            sheet1 = workbook1.sheet_by_name('170711_1143')
-            sheet2 = workbook2.sheet_by_name('170711_1334')
-            sheet3 = workbook3.sheet_by_name('170908_1146')
-            sheet4 = workbook4.sheet_by_name('171006_0927')
+            sheet1 = workbook1.sheet_by_name('170811_1231')
+            sheet2 = workbook2.sheet_by_name('170823_1534')
+            sheet3 = workbook3.sheet_by_name('170908_1004')
+            sheet4 = workbook4.sheet_by_name('171005_1029')
             x1 = []
             x2 = []
             x3 = []
@@ -59,7 +59,7 @@ class Subsession(BaseSubsession):
                 groups[int(index/24)].append(sorted([x4[index], x4[index + 1], x4[index + 2]]))
                 index += 3
             index = 0
-            while index < len(x4):
+            while index < len(x3):
                 groups[int(index/36)].append(sorted([x3[index], x3[index+1], x3[index+2]]))
                 index += 3
 
